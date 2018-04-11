@@ -35,6 +35,9 @@ module.exports = {
       .findAll({})
       .then(dbProduct => {
 
+        console.log(`\n---Found all products!---\n`);
+
+        res.json(dbProduct);
       })
   }
 }
