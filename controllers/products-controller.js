@@ -39,5 +39,8 @@ module.exports = {
 
         res.json(dbProduct);
       })
+      .catch(err => {
+        console.log(`Transaction find all error: ${err}`);
+      });
   }
 }
