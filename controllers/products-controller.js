@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const db = require('../models');
 require('console.table');
 
@@ -42,5 +43,49 @@ module.exports = {
       .catch(err => {
         console.log(`Transaction find all error: ${err}`);
       });
+  },
+
+  update: (req, res) => {
+
+    console.log(`\n---Updating Products---\n`);
+
+    if(!_.isEmpty(req.body)) {
+
+      req.body.map(product => {
+        
+        const id = product.id;
+        const quantity = product.quantity
+        
+        const updateObj = {
+          stock_quantity: quantity
+        }
+  
+        const whereObj = {
+          where: { id }
+        }
+    
+        db.Product
+          .update(updateObj, whereObj)
+          .then(dbProduct => {
+    
+            console.log(dbProduct);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      });
+
+      res.json({
+        message: 'Products Table Updated',
+        status: 200
+      });
+
+    } else {
+
+      res.json({
+        message: 'Empty Array',
+        status: 204
+      })
+    }    
   }
 }

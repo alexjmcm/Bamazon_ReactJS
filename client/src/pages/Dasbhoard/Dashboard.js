@@ -11,7 +11,8 @@ import API from '../../utils/API';
 class Dashboard extends Component {
 
   state = {
-    products: []
+    products: [],
+    checkout: []
   }
 
   componentDidMount() {

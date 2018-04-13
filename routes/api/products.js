@@ -9,4 +9,8 @@ router
   .route('/all')
   .get(productsController.findAll);
 
+router
+  .route('/update')
+  .put(productsController.update);
+
 module.exports = router;
