@@ -173,7 +173,7 @@ class Dashboard extends Component {
                             <td>{product.id}</td>
                             <td>{product.product_name}</td>
                             <td>{product.department_name}</td>
-                            <td>${(product.price*1).toFixed(2).toLocaleString()}</td>
+                            <td>${(product.price*1).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
                             <td>{product.stock_quantity}</td>
                             <td>
                               <button onClick={() => this.handleUAddCheckout(product)} className="btn btn-success">Add</button>
@@ -204,7 +204,7 @@ class Dashboard extends Component {
                           <tr key={i}>
                             <td>{item.quantity}x</td>
                             <td>{item.product_name}</td>
-                            <td>${(item.quantity * item.price).toFixed(2).toLocaleString()}</td>
+                            <td>${(item.quantity * item.price).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
                             <td onClick={() => this.handleSubtractCheckout(item)} ><i className="fas fa-times"></i></td>
                           </tr>
                         ))}
@@ -213,7 +213,7 @@ class Dashboard extends Component {
                         <tr>
                           <td></td>
                           <td>Total</td>
-                          <td><b>${this.state.checkout.reduce((sum, item) => sum += (item.quantity * item.price), 0).toLocaleString({style: 'currency', currency: 'USD'})}</b></td>
+                          <td><b>${this.state.checkout.reduce((sum, item) => sum += (item.quantity * item.price), 0).toLocaleString(undefined, { minimumFractionDigits: 2})}</b></td>
                           <td></td>
                         </tr>
                       </tfoot>
