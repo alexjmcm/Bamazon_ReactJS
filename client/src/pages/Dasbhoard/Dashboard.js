@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { Container, Row, Col } from '../../components/Grid';
+import { QuantityBtn } from '../../components/Buttons';
 import { Card, CardBody, CardHeader, CardText, CardTitle } from '../../components/Card';
+import { Container, Row, Col } from '../../components/Grid';
 import { Table } from '../../components/Table';
 import { Title } from '../../components/Title';
 
@@ -65,6 +66,7 @@ class Dashboard extends Component {
                           <th>Department</th>
                           <th>Price</th>
                           <th>Quantity</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -75,6 +77,10 @@ class Dashboard extends Component {
                             <td>{product.department_name}</td>
                             <td>{product.price}</td>
                             <td>{product.stock_quantity}</td>
+                            <td>
+                              <QuantityBtn type="plus" />
+                              <QuantityBtn type="minus" />
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -85,6 +91,7 @@ class Dashboard extends Component {
                 </CardBody>
               </Card>
             </Col>
+
             <Col size="md-3">
 
               {/* Checkout Section */}
