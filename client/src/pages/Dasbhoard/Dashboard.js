@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import './Dashboard.css';
 
-import { QuantityBtn } from '../../components/Buttons';
-import { Card, CardBody, CardHeader, CardText, CardTitle } from '../../components/Card';
+import { Card, CardBody, CardHeader } from '../../components/Card';
 import { Container, Row, Col } from '../../components/Grid';
 import { Table } from '../../components/Table';
 import { Title } from '../../components/Title';
@@ -37,7 +37,7 @@ class Dashboard extends Component {
       })
   }
 
-  handleUpdateQuantity = (product, type) => {
+  handleUAddCheckout = product => {
 
     const {id, price, product_name} = product;
     const productIndex = this.state.products.findIndex(product => product.id === id);
@@ -69,6 +69,7 @@ class Dashboard extends Component {
     // Otherwise, we will update the current checkout array
     } else {
 
+      // Attempt to find item in checkout array
       const checkoutIndex = this.state.checkout.findIndex(item => item.id === id);
       
       // If the user click is NOT located in the current array, we will add it
@@ -100,6 +101,38 @@ class Dashboard extends Component {
     }
   }
 
+  handleSubtractCheckout = product => {
+
+    const {id, price, product_name} = product;
+    const checkoutIndex = this.state.checkout.findIndex(item => item.id === id);
+    const productIndex = this.state.products.findIndex(product => product.id === id);
+
+    const productArray = [...this.state.products];
+    const checkoutArray = [...this.state.checkout];
+
+    // Update quantities for both arrays
+    checkoutArray[checkoutIndex].quantity--;
+    productArray[productIndex].stock_quantity++;
+    
+    // If checkout amount reaches zero, we will remove from array
+    if(checkoutArray[checkoutIndex].quantity === 0) {
+
+      checkoutArray.splice(checkoutIndex, 1);
+
+      this.setState({
+        products: productArray,
+        checkout: checkoutArray
+      });
+
+    // Otherwise, we update normally
+    } else {
+      this.setState({
+        products: productArray,
+        checkout:checkoutArray
+      })
+    }
+  }
+
   render() {
     return (
       <div>
@@ -114,7 +147,7 @@ class Dashboard extends Component {
           </Row>
 
           <Row>
-            <Col size="md-9">
+            <Col size="md-8">
 
               {/* Inventory List Table */}
               <Card>
@@ -140,11 +173,10 @@ class Dashboard extends Component {
                             <td>{product.id}</td>
                             <td>{product.product_name}</td>
                             <td>{product.department_name}</td>
-                            <td>{product.price}</td>
+                            <td>${(product.price*1).toFixed(2).toLocaleString()}</td>
                             <td>{product.stock_quantity}</td>
                             <td>
-                              <QuantityBtn handleUpdateQuantity={this.handleUpdateQuantity} product={product} type="plus" />
-                              <QuantityBtn handleUpdateQuantity={this.handleUpdateQuantity} product={product} type="minus" />
+                              <button onClick={() => this.handleUAddCheckout(product)} className="btn btn-success">Add</button>
                             </td>
                           </tr>
                         ))}
@@ -157,7 +189,7 @@ class Dashboard extends Component {
               </Card>
             </Col>
 
-            <Col size="md-3">
+            <Col size="md-4">
 
               {/* Checkout Section */}
               <Card>
@@ -166,17 +198,26 @@ class Dashboard extends Component {
                   
                   {this.state.checkout.length > 0 ? 
 
-                    <table>
+                    <Table>
                       <tbody>
                         {this.state.checkout.map((item, i) => (
                           <tr key={i}>
                             <td>{item.quantity}x</td>
                             <td>{item.product_name}</td>
-                            <td>{item.price}</td>
+                            <td>${(item.quantity * item.price).toFixed(2).toLocaleString()}</td>
+                            <td onClick={() => this.handleSubtractCheckout(item)} ><i className="fas fa-times"></i></td>
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                      <tfoot>
+                        <tr>
+                          <td></td>
+                          <td>Total</td>
+                          <td><b>${this.state.checkout.reduce((sum, item) => sum += (item.quantity * item.price), 0).toLocaleString({style: 'currency', currency: 'USD'})}</b></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </Table>
                   :
                     <div className="text-center"><em>Checkout is Empty</em></div>
                   }
