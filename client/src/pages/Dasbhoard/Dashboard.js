@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 import { QuantityBtn } from '../../components/Buttons';
 import { Card, CardBody, CardHeader, CardText, CardTitle } from '../../components/Card';
@@ -34,6 +35,76 @@ class Dashboard extends Component {
       .catch(err => {
         console.log(err);
       })
+  }
+
+  handleUpdateQuantity = (product, type) => {
+
+    console.log(type);
+
+    const {id, price, product_name} = product;
+    const productIndex = this.state.products.findIndex(product => product.id === id);
+
+    const productArray = [...this.state.products];
+    const checkoutArray = [...this.state.checkout];
+
+    switch(type) {
+      case 'plus':
+        productArray[productIndex].stock_quantity--;
+        break;
+      case 'minus':
+        productArray[productIndex].stock_quantity++;
+        break;
+    }
+
+    // If the checkout array is empty, we create a new checkout
+    if(_.isEmpty(checkoutArray)) {
+
+      const newCheckout = [
+        {
+          id,
+          price,
+          product_name,
+          quantity: 1
+        }
+      ];
+
+      this.setState({
+        products: productArray,
+        checkout: newCheckout
+      });
+
+    // Otherwise, we will update the current checkout array
+    } else {
+
+      const checkoutIndex = this.state.checkout.findIndex(item => item.id === id);
+      
+      // If the user click is NOT located in the current array, we will add it
+      if(checkoutIndex === -1) {
+        
+        checkoutArray.push({
+          id,
+          price,
+          product_name,
+          quantity: 1
+        });
+
+        this.setState({
+          products: productArray,          
+          checkout: checkoutArray
+        });
+
+      // Otherwise, we will update the existing quantity
+      } else {
+
+        checkoutArray[checkoutIndex].quantity++;
+
+        this.setState({
+          products: productArray,
+          checkout: checkoutArray
+        });
+      }
+      console.log('Checkout Array: ', checkoutArray);
+    }
   }
 
   render() {
@@ -79,8 +150,8 @@ class Dashboard extends Component {
                             <td>{product.price}</td>
                             <td>{product.stock_quantity}</td>
                             <td>
-                              <QuantityBtn type="plus" />
-                              <QuantityBtn type="minus" />
+                              <QuantityBtn handleUpdateQuantity={this.handleUpdateQuantity} product={product} type="plus" />
+                              <QuantityBtn handleUpdateQuantity={this.handleUpdateQuantity} product={product} type="minus" />
                             </td>
                           </tr>
                         ))}
@@ -99,7 +170,23 @@ class Dashboard extends Component {
               <Card>
                 <CardHeader>Checkout</CardHeader>
                 <CardBody>
+                  
+                  {this.state.checkout.length > 0 ? 
 
+                    <table>
+                      <tbody>
+                        {this.state.checkout.map((item, i) => (
+                          <tr key={i}>
+                            <td>{item.quantity}x</td>
+                            <td>{item.product_name}</td>
+                            <td>{item.price}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  :
+                    <div className="text-center"><em>Checkout is Empty</em></div>
+                  }
                 </CardBody>
               </Card>
             </Col>
