@@ -2,9 +2,38 @@ import React, { Component } from 'react';
 
 import { Container, Row, Col } from '../../components/Grid';
 import { Card, CardBody, CardHeader, CardText, CardTitle } from '../../components/Card';
+import { Table } from '../../components/Table';
 import { Title } from '../../components/Title';
 
+import API from '../../utils/API';
+
 class Dashboard extends Component {
+
+  state = {
+    products: []
+  }
+
+  componentDidMount() {
+    this.loadProducts();
+  }
+
+  loadProducts = () => {
+    API
+      .getProducts()
+      .then(res => {
+
+        // Data in form of table
+        console.log(res.data);
+
+        this.setState({
+          products: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   render() {
     return (
       <div>
@@ -25,7 +54,34 @@ class Dashboard extends Component {
               <Card>
                 <CardHeader>Inventory List</CardHeader>
                 <CardBody>
-                  <CardText>There is where the table will go</CardText>
+
+                  {this.state.products.length > 0 ?
+
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>Product ID</th>
+                          <th>Product Name</th>
+                          <th>Department</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.products.map((product, i) => (
+                          <tr key={i}>
+                            <td>{product.id}</td>
+                            <td>{product.product_name}</td>
+                            <td>{product.department_name}</td>
+                            <td>{product.price}</td>
+                            <td>{product.stock_quantity}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  :
+                    <div className="text-center"><em>No Products Available</em></div>
+                  }
                 </CardBody>
               </Card>
             </Col>
@@ -35,7 +91,7 @@ class Dashboard extends Component {
               <Card>
                 <CardHeader>Checkout</CardHeader>
                 <CardBody>
-                  <CardText></CardText>
+
                 </CardBody>
               </Card>
             </Col>

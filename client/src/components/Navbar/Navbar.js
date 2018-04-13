@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from '../Grid';
 
 export const Navbar = () => (
-  <nav className="navbar navbar-expand-lg navbar-light bg-light mb-5">
+  <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <Container>
 
       {/* Brand */}
