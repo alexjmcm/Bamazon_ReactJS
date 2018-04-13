@@ -39,22 +39,15 @@ class Dashboard extends Component {
 
   handleUpdateQuantity = (product, type) => {
 
-    console.log(type);
-
     const {id, price, product_name} = product;
     const productIndex = this.state.products.findIndex(product => product.id === id);
 
     const productArray = [...this.state.products];
     const checkoutArray = [...this.state.checkout];
 
-    switch(type) {
-      case 'plus':
-        productArray[productIndex].stock_quantity--;
-        break;
-      case 'minus':
-        productArray[productIndex].stock_quantity++;
-        break;
-    }
+    // If the product quantity empty, stop the function
+    if(productArray[productIndex].stock_quantity === 0) return;
+    productArray[productIndex].stock_quantity--;
 
     // If the checkout array is empty, we create a new checkout
     if(_.isEmpty(checkoutArray)) {
