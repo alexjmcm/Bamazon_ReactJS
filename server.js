@@ -8,12 +8,12 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(routes);
-
-app.use(express.static(path.join(__dirname, 'client/build')));
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
