@@ -137,12 +137,16 @@ class Dashboard extends Component {
 
     // Disable all buttons to prevent multiple requests
     document.querySelectorAll('button').forEach(button => {
+      console.log(button);
       button.setAttribute('disabled', '');
     });
 
-    console.log(this.state.products);
-
-
+    API.updateProducts(this.state.products)
+      .then(res => {
+        if(res.status === 200) {
+          window.location.replace('/success');
+        }
+      });
   }
 
   render() {
@@ -209,7 +213,7 @@ class Dashboard extends Component {
                               <td>{item.quantity}x</td>
                               <td>{item.product_name}</td>
                               <td>{(item.quantity * item.price).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
-                              <td onClick={() => this.handleSubtractCheckout(item)} ><i className="fas fa-times"></i></td>
+                              <td><button className="delete" onClick={() => this.handleSubtractCheckout(item)}>x</button></td>
                             </tr>
                           ))}
                         </tbody>

@@ -13,7 +13,7 @@ class Success extends Component {
             <Col size="md-12">
               <div className="alert alert-success text-center" role="alert">Checkout Successful!</div>
               <div className="text-center">
-              <Link to="/"><button className="btn btn-primary">Go Back</button></Link>
+                <Link to="/"><button className="btn btn-primary">Go Back</button></Link>
               </div>
             </Col>
           </Row>

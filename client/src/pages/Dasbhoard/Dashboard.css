@@ -2,3 +2,14 @@
   color: red;
   cursor: pointer;
 }
+
+.delete {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  overflow: hidden;
+  outline:none;
+}

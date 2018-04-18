@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     price: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.FLOAT
     },
 
     stock_quantity: {
