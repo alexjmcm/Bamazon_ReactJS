@@ -25,7 +25,6 @@ class Dashboard extends Component {
       .getProducts()
       .then(res => {
 
-        // Data in form of table
         console.log(res.data);
 
         this.setState({
@@ -97,7 +96,6 @@ class Dashboard extends Component {
           checkout: checkoutArray
         });
       }
-      console.log('Checkout Array: ', checkoutArray);
     }
   }
 
@@ -133,19 +131,24 @@ class Dashboard extends Component {
     }
   }
 
+  handleFormSubmit = e => {
+
+    e.preventDefault();
+
+    // Disable all buttons to prevent multiple requests
+    document.querySelectorAll('button').forEach(button => {
+      button.setAttribute('disabled', '');
+    });
+
+    console.log(this.state.products);
+
+
+  }
+
   render() {
     return (
       <div>
         <Container>
-          <Row>
-            <Col size="md-12">
-
-              {/* Inventory List */}
-              <Title>Client Center</Title>
-
-            </Col>
-          </Row>
-
           <Row>
             <Col size="md-8">
 
@@ -159,8 +162,8 @@ class Dashboard extends Component {
                     <Table>
                       <thead>
                         <tr>
-                          <th>Product ID</th>
-                          <th>Product Name</th>
+                          <th>ID</th>
+                          <th>Name</th>
                           <th>Department</th>
                           <th>Price</th>
                           <th>Quantity</th>
@@ -173,10 +176,10 @@ class Dashboard extends Component {
                             <td>{product.id}</td>
                             <td>{product.product_name}</td>
                             <td>{product.department_name}</td>
-                            <td>${(product.price*1).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
+                            <td>{(product.price*1).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
                             <td>{product.stock_quantity}</td>
                             <td>
-                              <button onClick={() => this.handleUAddCheckout(product)} className="btn btn-success">Add</button>
+                              <button onClick={() => this.handleUAddCheckout(product)} className="btn btn-sm btn-success">Add</button>
                             </td>
                           </tr>
                         ))}
@@ -196,28 +199,36 @@ class Dashboard extends Component {
                 <CardHeader>Checkout</CardHeader>
                 <CardBody>
                   
-                  {this.state.checkout.length > 0 ? 
+                  {this.state.checkout.length > 0 ?
 
-                    <Table>
-                      <tbody>
-                        {this.state.checkout.map((item, i) => (
-                          <tr key={i}>
-                            <td>{item.quantity}x</td>
-                            <td>{item.product_name}</td>
-                            <td>${(item.quantity * item.price).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
-                            <td onClick={() => this.handleSubtractCheckout(item)} ><i className="fas fa-times"></i></td>
+                    <div>
+                      <Table>
+                        <tbody>
+                          {this.state.checkout.map((item, i) => (
+                            <tr key={i}>
+                              <td>{item.quantity}x</td>
+                              <td>{item.product_name}</td>
+                              <td>{(item.quantity * item.price).toLocaleString(undefined, { minimumFractionDigits: 2})}</td>
+                              <td onClick={() => this.handleSubtractCheckout(item)} ><i className="fas fa-times"></i></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td><b>Total</b></td>
+                            <td><b>${this.state.checkout.reduce((sum, item) => sum += (item.quantity * item.price), 0).toLocaleString(undefined, { minimumFractionDigits: 2})}</b></td>
+                            <td></td>
                           </tr>
-                        ))}
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td></td>
-                          <td>Total</td>
-                          <td><b>${this.state.checkout.reduce((sum, item) => sum += (item.quantity * item.price), 0).toLocaleString(undefined, { minimumFractionDigits: 2})}</b></td>
-                          <td></td>
-                        </tr>
-                      </tfoot>
-                    </Table>
+                        </tfoot>
+                      </Table>
+
+                      <form onSubmit={this.handleFormSubmit}>
+                        <div className="text-center">
+                          <button type="submit" className="btn btn-danger">Submit</button>
+                        </div>
+                      </form>
+                    </div>
                   :
                     <div className="text-center"><em>Checkout is Empty</em></div>
                   }

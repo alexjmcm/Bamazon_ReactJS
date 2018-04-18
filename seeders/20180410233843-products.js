@@ -7,14 +7,14 @@ module.exports = {
       {
         product_name: 'iPhone',
         department_name: 'Electronics',
-        price: 800,
-        stock_quantity: 25
+        price: 999.99,
+        stock_quantity: 5
       },
       {
         product_name: 'Microwave',
         department_name: 'Appliances',
-        price: 100,
-        stock_quantity: 200
+        price: 59.99,
+        stock_quantity: 15
       }
     ]);
   },

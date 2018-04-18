@@ -54,7 +54,7 @@ module.exports = {
       req.body.map(product => {
         
         const id = product.id;
-        const quantity = product.quantity
+        const quantity = product.stock_quantity;
         
         const updateObj = {
           stock_quantity: quantity
@@ -66,9 +66,8 @@ module.exports = {
     
         db.Product
           .update(updateObj, whereObj)
-          .then(dbProduct => {
-    
-            console.log(dbProduct);
+          .then(dbProduct => {    
+            console.log('Product Updates');
           })
           .catch(err => {
             console.log(err);
