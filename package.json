@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon server.js",
+    "server": "node server.js",
     "client": "node scripts/start-client.js",
     "start": "concurrently \"nodemon server.js\" \"npm run client\"",
     "build": "node scripts/build.js"
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "console.table": "^0.10.0"
+    "console.table": "^0.10.0",
+    "nodemon": "^1.17.3"
   }
 }
